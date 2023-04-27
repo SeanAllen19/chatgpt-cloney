@@ -1,24 +1,31 @@
+import { useState, useEffect} from "react";
+
 const App = () => {
+  const [value, setValue] = useState(null)
+  const [message, setMessage] = useState(null)
+
+
   const getMessages = async () => {
     const options = {
       method: "POST",
-      body : JSON.stringify({
+      body: JSON.stringify({
         message: "Hi world, how are you?",
       }),
       headers: {
         "Content-Type": "application/json"
       }
     }
-
     try {
       const response = await fetch('http://localhost:3000/completions', options)
       const data = await response.json()
-      console.log(data)
+      setMessage(data.choices[0].message)
+
     } catch(err) {
       console.error(err)
     }
   }
 
+    console.log(value)
   return (
     <div className="app">
       <section className="side-bar">
@@ -46,7 +53,7 @@ const App = () => {
         <div className="bottom-section">
 
           <div className="input-container">
-            <input />
+            <input value= {value} onChange={(e) => setValue(e.target.value)}/>
             <div id="submit" onClick={getMessages}>➢</div>
           </div>
           <p className="info">
